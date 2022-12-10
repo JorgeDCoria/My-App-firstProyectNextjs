@@ -1,6 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-}
+  images: {
+    // domains: ["www.reuters.com"],
 
-module.exports = nextConfig
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "techcrunch.com",
+      },
+    ],
+  },
+};
+
+module.exports = nextConfig;

@@ -2,6 +2,8 @@ import styles from "../styles/Home.module.css";
 import Link from "next/link";
 import { useRouter } from "next/router"; // permite usar el push
 import PageLayaout from "./components/PageLayout";
+//conponente de Next que permite optimizar las images
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export default function Home({ articles }) {
@@ -23,7 +25,7 @@ export default function Home({ articles }) {
   // }, []);
   return (
     <PageLayaout title={"Bienvenidos"}>
-      <div className={styles.container}>
+      <div className={`${styles.container} flex flex-col items-center  gap-8`}>
         {/* al pasar por props articles ya no seria necesario preguntar si tiene longitus ya  
         que este, existiria o no existiria
         {articles.length === 0 && <p>Loading ...</p>} */}
@@ -35,10 +37,18 @@ export default function Home({ articles }) {
               className="mb-8 w-1/2 flex flex-col items-center"
             >
               <h2 className="text-3xl">{article.title}</h2>
-              <img
+              {/* con este componente es necesario indicarle el width y height 
+              Por otro lado tambien se debe especificar de donde estamos recibiendo las images
+              Servel propone esto para evitar que tengamos algo malicioso "ponele"(concepto a profundizar)
+              modificar:  next.config.js
+              */}
+              <Image
                 alt={`image for the article ${article.title}`}
                 className="w-full"
                 src={article.urlToImage}
+                //src="https://www.reuters.com/resizer/lq3-zSfs5YLOd6NkvPQ5wPam5qc=/1200x628/smart/filters:quality(80)/cloudfront-us-east-2.images.arcpublishing.com/reuters/TFJEVGNY7JK4ZDCPNSSUMWYX6Y.jpg"
+                width={300}
+                height={300}
               />
               <p>{article.description}</p>
             </article>
@@ -82,7 +92,7 @@ export default function Home({ articles }) {
 //N request -> se ejecuta 1 vez en build time (o para refrescar la pagina)
 export async function getStaticProps() {
   const response = await fetch(
-    `https://newsapi.org/v2/everything?q=tesla&from=2022-11-09&sortBy=publishedAt&apiKey=dc07cf1e6d9549cfa12aad58aaa925c7`
+    `https://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey=dc07cf1e6d9549cfa12aad58aaa925c7`
   );
   const { articles } = await response.json();
   return {
